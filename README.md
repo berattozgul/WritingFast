@@ -70,28 +70,6 @@ A JavaFX application to test and improve your typing speed and accuracy.
 - **Backspace**: Delete previous character
 - **Space**: Submit current word and move to next
 
-## Requirements
-- Java 21 or higher
-- JavaFX 21
-
-## Installation
-
-### Using Maven
-1. Clone the repository
-```bash
-git clone [repository-url]
-```
-
-2. Navigate to the project directory
-```bash
-cd WritingFast
-```
-
-3. Run the application using Maven
-```bash
-mvn clean javafx:run
-```
-
 ## Development
 
 ### Project Structure
@@ -117,13 +95,6 @@ src/
 - `WritingTestController.java`: Main controller handling test logic
 - `writing-test-view.fxml`: UI layout definition
 - `styles.css`: Application styling
-
-## Tips for Improving Your Score
-1. Focus on accuracy first, speed will come naturally
-2. Start with Easy difficulty and progress gradually
-3. Take regular breaks to avoid fatigue
-4. Practice regularly with different test modes
-5. Pay attention to your error patterns
-
+- 
 ## Contributing
 Feel free to submit issues and enhancement requests! 
