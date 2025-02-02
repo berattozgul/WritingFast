@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.bo.writingfast.WritingTestController" 
+      stylesheets="@styles.css"
+      styleClass="root">
+    
+    <padding>
+        <Insets bottom="30.0" left="40.0" right="40.0" top="30.0"/>
+    </padding>
+
+    <Text styleClass="title-text" text="Writing Speed Test"/>
+    
+    <HBox spacing="20" alignment="CENTER">
+        <HBox spacing="10" alignment="CENTER">
+            <Label text="Difficulty:" styleClass="difficulty-label"/>
+            <ComboBox fx:id="difficultyComboBox" styleClass="difficulty-combo"/>
+            <Label fx:id="bestWpmLabel" text="Best: 0 WPM" styleClass="best-score"/>
+        </HBox>
+        
+        <Separator orientation="VERTICAL"/>
+        
+        <HBox spacing="10" alignment="CENTER">
+            <Label text="Mode:" styleClass="difficulty-label"/>
+            <ComboBox fx:id="testModeComboBox" styleClass="difficulty-combo"/>
+            <Spinner fx:id="limitSpinner" styleClass="limit-spinner"/>
+            <Label fx:id="limitLabel" text="seconds" styleClass="limit-label"/>
+        </HBox>
+    </HBox>
+
+    <VBox styleClass="prompt-container" alignment="CENTER" spacing="10">
+        <Label text="Type the following text:" styleClass="instruction-label"/>
+        <TextFlow fx:id="promptTextFlow" textAlignment="CENTER"/>
+    </VBox>
+    
+    <TextField fx:id="userInputArea" 
+              prefWidth="500"
+              styleClass="input-area"/>
+    
+    <HBox spacing="20" alignment="CENTER" styleClass="stats-container">
+        <VBox alignment="CENTER" spacing="5" styleClass="stat-box">
+            <Label text="Time" styleClass="stat-label"/>
+            <Label fx:id="timerLabel" text="0:00" styleClass="stat-value"/>
+        </VBox>
+        
+        <Separator orientation="VERTICAL"/>
+        
+        <VBox alignment="CENTER" spacing="5" styleClass="stat-box">
+            <Label text="WPM" styleClass="stat-label"/>
+            <Label fx:id="wpmLabel" text="0" styleClass="stat-value"/>
+        </VBox>
+        
+        <Separator orientation="VERTICAL"/>
+        
+        <VBox alignment="CENTER" spacing="5" styleClass="stat-box">
+            <Label text="Accuracy" styleClass="stat-label"/>
+            <Label fx:id="accuracyLabel" text="0%" styleClass="stat-value"/>
+        </VBox>
+    </HBox>
+    
+    <HBox spacing="20" alignment="CENTER">
+        <Button text="Start Test" onAction="#handleStartTest" styleClass="start-button"/>
+        <Button text="Reset" onAction="#handleResetTest" styleClass="reset-button"/>
+    </HBox>
+    
+    <ProgressBar fx:id="progressBar" progress="0.0" prefWidth="600" styleClass="progress-bar"/>
+</VBox> 
