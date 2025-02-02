@@ -118,6 +118,41 @@
     -fx-background-radius: 4;
 }
 
+.settings-container {
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-padding: 15 30;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 10, 0, 0, 3);
+}
+
+.settings-label {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2c3e50;
+}
+
+.settings-combo {
+    -fx-font-size: 14px;
+    -fx-background-color: white;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1;
+    -fx-padding: 5 10;
+    -fx-pref-width: 120px;
+}
+
+.settings-combo:focused {
+    -fx-border-color: #3498db;
+}
+
+.best-score {
+    -fx-font-size: 14px;
+    -fx-text-fill: #e67e22;
+    -fx-font-weight: bold;
+    -fx-padding: 5 0;
+}
+
 .limit-spinner {
     -fx-font-size: 14px;
     -fx-background-color: white;
@@ -126,7 +161,16 @@
     -fx-border-color: #e0e0e0;
     -fx-border-width: 1;
     -fx-padding: 5 10;
-    -fx-pref-width: 80px;
+    -fx-min-width: 80px;
+    -fx-max-width: 80px;
+    -fx-alignment: center;
+}
+
+.limit-spinner .text-field {
+    -fx-alignment: center;
+    -fx-background-color: transparent;
+    -fx-font-size: 14px;
+    -fx-text-fill: #2c3e50;
 }
 
 .limit-spinner:focused {
@@ -135,16 +179,23 @@
 
 .limit-spinner .increment-arrow-button,
 .limit-spinner .decrement-arrow-button {
-    -fx-background-color: transparent;
-    -fx-border-color: transparent;
+    -fx-background-color: #f8f9fa;
+    -fx-border-color: #e0e0e0;
+    -fx-padding: 3;
 }
 
 .limit-spinner .increment-arrow-button:hover,
 .limit-spinner .decrement-arrow-button:hover {
-    -fx-background-color: #f0f0f0;
+    -fx-background-color: #e9ecef;
+}
+
+.limit-spinner .increment-arrow,
+.limit-spinner .decrement-arrow {
+    -fx-background-color: #495057;
 }
 
 .limit-label {
     -fx-font-size: 14px;
     -fx-text-fill: #7f8c8d;
+    -fx-padding: 5 0;
 } 

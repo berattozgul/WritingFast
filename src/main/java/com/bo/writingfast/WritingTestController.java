@@ -94,9 +94,32 @@ public class WritingTestController {
     }
 
     private void setupPrompts() {
-        textPrompts.put("Easy", "The quick brown fox jumps over the lazy dog. Simple words make typing practice fun and easy.");
-        textPrompts.put("Medium", "The quick brown fox jumps over the lazy dog. This classic pangram contains every letter of the English alphabet at least once. Pangrams are a good way to practice typing.");
-        textPrompts.put("Hard", "Pack my box with five dozen liquor jugs! How vexingly quick daft zebras jump. The five boxing wizards jump quickly. Sphinx of black quartz, judge my vow!");
+        // Easy level texts - Simple sentences and common words
+        textPrompts.put("Easy", String.join(" ",
+            "The quick brown fox jumps over the lazy dog. Simple words make typing practice fun and easy.",
+            "She sells seashells by the seashore. The sun shines bright in the blue sky.",
+            "A happy family enjoys dinner together. Children play in the park after school.",
+            "My favorite book tells an amazing story. The cat sleeps peacefully on the soft pillow.",
+            "Fresh bread smells wonderful in the morning. Birds sing sweet songs in the garden."
+        ));
+
+        // Medium level texts - Mix of common and some challenging words
+        textPrompts.put("Medium", String.join(" ",
+            "The quick brown fox jumps over the lazy dog. This classic pangram contains every letter of the English alphabet at least once.",
+            "Professional typists maintain excellent posture and finger positioning while working on their keyboards.",
+            "The technology industry continues to evolve with innovative solutions and groundbreaking developments.",
+            "Environmental scientists study the impact of climate change on various ecosystems around the world.",
+            "Effective communication skills are essential for success in both personal and professional relationships."
+        ));
+
+        // Hard level texts - Complex sentences and challenging words
+        textPrompts.put("Hard", String.join(" ",
+            "Pack my box with five dozen liquor jugs! How vexingly quick daft zebras jump.",
+            "Sphinx of black quartz, judge my vow! The five boxing wizards jump quickly.",
+            "Amazingly few discotheques provide jukeboxes! Waltz, nymph, for quick jigs vex Bud.",
+            "Jackdaws love my big sphinx of quartz. The job requires extra pluck and zeal from every young wage earner.",
+            "Two driven jocks help fax my big quiz. Five quacking zephyrs jolt my wax bed. The quick onyx goblin jumps over the lazy dwarf."
+        ));
     }
 
     private void setupDifficultyLevels() {
@@ -113,6 +136,15 @@ public class WritingTestController {
         SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 999, 60);
         limitSpinner.setValueFactory(valueFactory);
         limitSpinner.setEditable(true);
+        
+        // Add listener for mode changes to update spinner defaults
+        testModeComboBox.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal == TestMode.TIME_LIMIT) {
+                limitSpinner.getValueFactory().setValue(60); // Default 60 seconds
+            } else if (newVal == TestMode.WORD_COUNT) {
+                limitSpinner.getValueFactory().setValue(20); // Default 20 words
+            }
+        });
         
         updateTestModeUI(TestMode.TIME_LIMIT);
     }
@@ -212,17 +244,40 @@ public class WritingTestController {
         totalCorrectChars += correctChars;
         totalTypedChars += totalChars;
 
-        // Move to next word regardless of whether it was correct
+        // Move to next word
         currentWordIndex++;
-        if (currentWordIndex < words.length) {
-            updatePromptDisplay();
-        } else {
-            finishTest();
+        
+        // Check if we should continue based on the test mode
+        TestMode currentMode = testModeComboBox.getValue();
+        boolean shouldContinue = true;
+        
+        switch (currentMode) {
+            case WORD_COUNT:
+                if (currentWordIndex >= limitSpinner.getValue()) {
+                    shouldContinue = false;
+                }
+                break;
+            case INFINITE:
+                if (currentWordIndex >= words.length) {
+                    shouldContinue = false;
+                }
+                break;
+            case TIME_LIMIT:
+                if (currentWordIndex >= words.length) {
+                    // In time limit mode, wrap around to the beginning if we reach the end
+                    currentWordIndex = 0;
+                }
+                break;
         }
         
-        // Update stats and progress
-        calculateStats();
-        updateProgress();
+        if (!shouldContinue) {
+            finishTest();
+        } else {
+            updatePromptDisplay();
+            // Update stats and progress
+            calculateStats();
+            updateProgress();
+        }
     }
 
     private void finishTest() {
@@ -236,18 +291,22 @@ public class WritingTestController {
         if (currentWpm > bestWpm) {
             bestWpmScores.put(difficulty, currentWpm);
             updateBestWpm(difficulty);
-            showCongratulations();
+            Platform.runLater(this::showCongratulations);
         }
         
+        // Re-enable UI controls
         userInputArea.setDisable(true);
+        difficultyComboBox.setDisable(false);
+        testModeComboBox.setDisable(false);
+        limitSpinner.setDisable(false);
     }
 
     private void showCongratulations() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("New Record!");
         alert.setHeaderText("Congratulations!");
-        alert.setContentText("You've achieved a new best WPM score!");
-        alert.showAndWait();
+        alert.setContentText(String.format("You've achieved a new best WPM score of %s!", wpmLabel.getText()));
+        alert.show(); // Using show() instead of showAndWait()
     }
 
     @FXML
@@ -306,7 +365,7 @@ public class WritingTestController {
                 progress = (double) currentWordIndex / limitSpinner.getValue();
                 break;
             case INFINITE:
-                progress = (double) currentWordIndex / totalWords;
+                progress = currentWordIndex >= words.length ? 1.0 : (double) currentWordIndex / words.length;
                 break;
             default:
                 progress = 0;
